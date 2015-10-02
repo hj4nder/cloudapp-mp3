@@ -22,6 +22,9 @@ public class TopWordFinderTopologyPartA {
     Config config = new Config();
     config.setDebug(true);
 
+    builder.setSpout("spout", new RandomSentenceSpout(), 5);
+    builder.setBolt("split", new SplitSentenceBolt(), 8).shuffleGrouping("spout");
+    builder.setBolt("count", new WordCountBolt(), 12).fieldsGrouping("split", new Fields("word"));
 
     /*
     ----------------------TODO-----------------------
