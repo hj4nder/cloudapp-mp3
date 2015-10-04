@@ -13,6 +13,7 @@ import backtype.storm.topology.IRichSpout;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
+import backtype.storm.utils.Utils;
 
 public class FileReaderSpout implements IRichSpout {
 
@@ -24,6 +25,7 @@ public class FileReaderSpout implements IRichSpout {
     @Override
     public void open(Map conf, TopologyContext context,
                      SpoutOutputCollector collector) {
+
 
         Objects.requireNonNull(conf);
         Objects.requireNonNull(conf.get("inputFile"));
@@ -46,13 +48,9 @@ public class FileReaderSpout implements IRichSpout {
         String line;
         try {
             if ((line = br.readLine()) != null) {
-                _collector.emit(Arrays.asList(new Object[]{line}));
+                _collector.emit(new Values(line));
 
-            }else try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            } else Utils.sleep(1000);
 
         } catch (IOException e) {
             e.printStackTrace();
