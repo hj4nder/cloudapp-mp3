@@ -27,7 +27,7 @@ public class TopWordFinderTopologyPartC {
 
     builder.setSpout("spout", new FileReaderSpout(), 1);
     builder.setBolt("split", new SplitSentenceBolt(), 8).shuffleGrouping("spout");
-    builder.setBolt("normalize", new NormalizerBolt(), 8).fieldsGrouping("split", new Fields("word"));
+    builder.setBolt("normalize", new NormalizerBolt(), 8).shuffleGrouping("split");
     builder.setBolt("count", new WordCountBolt(), 12).fieldsGrouping("normalize", new Fields("word"));
 
 
