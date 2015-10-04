@@ -27,15 +27,15 @@ public class FileReaderSpout implements IRichSpout {
                      SpoutOutputCollector collector) {
 
 
-        Objects.requireNonNull(conf);
-        Objects.requireNonNull(conf.get("inputFile"));
+        if(conf != null && conf.get("inputFile") != null) {
 
-        try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(
-                    Paths.get(conf.get("inputFile").toString()).toFile().getAbsolutePath())));
+            try {
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(
+                        Paths.get(conf.get("inputFile").toString()).toFile().getAbsolutePath())));
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
         this.context = context;
@@ -47,7 +47,7 @@ public class FileReaderSpout implements IRichSpout {
 
         String line;
         try {
-            if ((line = br.readLine()) != null) {
+            if (br != null && (line = br.readLine()) != null) {
                 _collector.emit(new Values(line));
 
             } else Utils.sleep(1000);
