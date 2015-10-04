@@ -31,9 +31,9 @@ public class NormalizerBolt extends BaseBasicBolt {
     ------------------------------------------------- */
 
       Objects.requireNonNull(tuple);
-      String word = Objects.requireNonNull(tuple.getString(0));
+      Objects.requireNonNull(tuple.getString(0));
 
-      word = word.toLowerCase();
+      String word = tuple.getString(0).toLowerCase();
 
       if(! commonWords.contains(word)){
         collector.emit(new Values(word));
