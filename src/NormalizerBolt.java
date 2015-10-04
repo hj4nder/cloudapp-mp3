@@ -4,6 +4,8 @@ import backtype.storm.topology.base.BaseBasicBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
+import clojure.lang.Obj;
+import com.google.common.base.Strings;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,12 +32,9 @@ public class NormalizerBolt extends BaseBasicBolt {
 
     ------------------------------------------------- */
 
-      Objects.requireNonNull(tuple);
-      Objects.requireNonNull(tuple.getString(0));
+      String word = tuple != null && tuple.getString(0) != null ? tuple.getString(0).toLowerCase().trim(): null;
 
-      String word = tuple.getString(0).toLowerCase().trim();
-
-      if(! commonWords.contains(word)){
+      if( word != null && ! commonWords.contains(word)){
         collector.emit(new Values(word));
       }
   }
